@@ -1,0 +1,222 @@
+ <!--Impido que la acividad se reinicie-->
+ android:configChanges="screenSize|orientation"
+
+
+ estados de actividad
+
+     /**
+     @Override
+     protected void onStart() {
+         super.onStart();
+         mostrarLogInformacion("onStart");
+         // The activity is about to become visible.
+     }
+
+     @Override
+     protected void onResume() {
+         super.onResume();
+         mostrarLogInformacion("onResume");
+         // The activity has become visible (it is now "resumed").
+     }
+     @Override
+     protected void onPause() {
+         super.onPause();
+         mostrarLogInformacion("onPause");
+         // Another activity is taking focus (this activity is about to be "paused").
+     }
+     @Override
+     protected void onStop() {
+         super.onStop();
+         mostrarLogInformacion("onStop");
+         // The activity is no longer visible (it is now "stopped")
+     }
+     @Override
+     protected void onDestroy() {
+         super.onDestroy();
+         mostrarLogInformacion("onDestroy");
+         // The activity is about to be destroyed.
+     }
+      */
+
+
+
+
+     --------------
+
+
+
+   /*
+    public void webServices(String usuario, String password){
+        try{
+            String strUrl="https://control.salesup.com.mx/webservices/jsonPrueba.dbsp?usuario="+usuario+"&password="+password;
+            URL url=new URL(strUrl);
+            HttpURLConnection conexion=(HttpURLConnection) url.openConnection();
+            BufferedReader buffer=new BufferedReader(new InputStreamReader(conexion.getInputStream()));
+            String line="";
+            String resultadoWs="";
+            while((line=buffer.readLine())!=null){
+                resultadoWs += line;
+            }
+            Log.i("WS", resultadoWs);
+            txtDatos= (TextView) findViewById(R.id.txtJson);
+            txtDatos.setText(String.valueOf(resultadoWs));
+            buffer.close();
+        }catch(Exception e){
+            Log.e("ERROR", e.toString());
+        }
+
+    }
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    private void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mLoginFormView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+    public Boolean validarCamposObligatorios(){
+        Boolean resultado=true;
+        String usr = mEmailView.getText().toString();
+        String pwd = mPasswordView.getText().toString();
+        mEmailView.setError(null);
+        mPasswordView.setError(null);
+        if(TextUtils.isEmpty(usr)){ //
+             mEmailView.setError("Correo requerido");
+            //String password = mPasswordView.getText().toString();
+            resultado=false;
+        }else if(TextUtils.isEmpty(pwd)){ //
+            mPasswordView.setError("PWd requerido");
+            //String password = mPasswordView.getText().toString();
+            resultado=false;
+        }
+        return resultado;
+    }
+    public void obtenerDatosLyaout(){
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mPasswordView = (EditText) findViewById(R.id.password);
+        btnIngresar=(Button) findViewById(R.id.email_sign_in_button);
+
+        btnIngresar.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                String usr=mEmailView.getText().toString();
+                String pss=mPasswordView.getText().toString();
+
+                if(validarCamposObligatorios()){
+                    webServices(usr, pss);
+                }
+
+
+
+
+
+               // WebServices ws=new WebServices();
+               // ws.crearURL(usr, pwd);
+
+            }
+
+        });
+
+
+
+    }
+
+
+
+    public void parsearInformacion(String resultado){
+        JSONArray jsonDatos=null;
+        String nombre, clave;
+        try{
+            jsonDatos=new JSONArray(resultado);
+            Log.e("JSON", String.valueOf(jsonDatos));
+
+        }catch(JSONException e){
+
+        }
+
+        for (int i=0; i< jsonDatos.length(); i++){
+            try{
+                JSONObject jsonObject=jsonDatos.getJSONObject(i);
+                String base=jsonObject.getString("BD_ACTUAL");
+                Log.i("BD", base);
+            }catch(JSONException e){
+
+            }
+        }
+    }
+
+
+*/
+
+
+
+
+public void getData(){
+        class GetDataJSON extends AsyncTask<String, Void, String>{
+
+            @Override
+            protected String doInBackground(String... params) {
+                DefaultHttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
+                HttpPost httppost = new HttpPost("http://simplifiedcoding.16mb.com/get-data.php");
+
+                // Depends on your web service
+                httppost.setHeader("Content-type", "application/json");
+
+                InputStream inputStream = null;
+                String result = null;
+                try {
+                    HttpResponse response = httpclient.execute(httppost);
+                    HttpEntity entity = response.getEntity();
+
+                    inputStream = entity.getContent();
+                    // json is UTF-8 by default
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
+                    StringBuilder sb = new StringBuilder();
+
+                    String line = null;
+                    while ((line = reader.readLine()) != null)
+                    {
+                        sb.append(line + "\n");
+                    }
+                    result = sb.toString();
+                } catch (Exception e) {
+                    // Oops
+                }
+                finally {
+                    try{if(inputStream != null)inputStream.close();}catch(Exception squish){}
+                }
+                return result;
+            }
+
+            @Override
+            protected void onPostExecute(String result){
+                myJSON=result;
+                showList();
+            }
+        }
+        GetDataJSON g = new GetDataJSON();
+        g.execute();
+    }
